@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from django.views.generic import RedirectView
+from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -25,7 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
-    path('', RedirectView.as_view(url='/api/docs/', permanent=False)),
+    path('', TemplateView.as_view(template_name='index.html'), name='accueil'),
     path('api/comptes/', include('accounts.urls')),
     path('api/profils/', include('profiles.urls')),
     path('api/projets/', include('projects.urls')),
