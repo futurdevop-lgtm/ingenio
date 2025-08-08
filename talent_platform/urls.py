@@ -26,13 +26,14 @@ urlpatterns = [
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='docs'),
     path('', TemplateView.as_view(template_name='index.html'), name='accueil'),
-    path('api/comptes/', include('accounts.urls')),
-    path('api/profils/', include('profiles.urls')),
-    path('api/projets/', include('projects.urls')),
-    path('api/recherche/', include('search.urls')),
-    path('api/tableau/', include('dashboard.urls')),
-    path('api/comm/', include('communications.urls')),
-    path('api/securite/', include('security.urls')),
+    path('app/', include(('portal.urls', 'portal'), namespace='portal')),
+    path('api/comptes/', include(('accounts.urls', 'accounts'), namespace='accounts')),
+    path('api/profils/', include(('profiles.urls', 'profiles'), namespace='profiles')),
+    path('api/projets/', include(('projects.urls', 'projects'), namespace='projects')),
+    path('api/recherche/', include(('search.urls', 'search'), namespace='search')),
+    path('api/tableau/', include(('dashboard.urls', 'dashboard'), namespace='dashboard')),
+    path('api/comm/', include(('communications.urls', 'communications'), namespace='communications')),
+    path('api/securite/', include(('security.urls', 'security'), namespace='security')),
 ]
 
 if settings.DEBUG:

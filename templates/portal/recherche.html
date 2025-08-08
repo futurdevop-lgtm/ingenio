@@ -1,0 +1,28 @@
+{% extends 'portal/base.html' %}
+{% block title %}Recherche - Plateforme de Talents{% endblock %}
+{% block content %}
+<h2>Recherche d’ingénieurs</h2>
+<form method="get" style="margin:10px 0;display:flex;gap:8px;flex-wrap:wrap">
+  <input type="text" name="competence" value="{{ competence }}" placeholder="Compétence (ex: React)" />
+  <select name="pile">
+    <option value="">Pile (optionnel)</option>
+    <option value="MEAN" {% if pile == 'MEAN' %}selected{% endif %}>MEAN</option>
+    <option value="MERN" {% if pile == 'MERN' %}selected{% endif %}>MERN</option>
+    <option value="LAMP" {% if pile == 'LAMP' %}selected{% endif %}>LAMP</option>
+    <option value=".NET" {% if pile == '.NET' %}selected{% endif %}>.NET</option>
+  </select>
+  <button type="submit">Filtrer</button>
+</form>
+<div class="grid" style="grid-template-columns:repeat(3,1fr)">
+  {% for p in profils %}
+  <div class="card">
+    <div style="font-weight:600">{{ p.user.username }}</div>
+    <div class="muted">{{ p.title }} • {{ p.location }}</div>
+    <div class="muted">Expérience: {{ p.years_of_experience }} ans</div>
+  </div>
+  {% empty %}
+  <div class="muted">Aucun résultat</div>
+  {% endfor %}
+</div>
+<div class="muted" style="margin-top:10px">Page {{ profils.number }} / {{ profils.paginator.num_pages }}</div>
+{% endblock %}

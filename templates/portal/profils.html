@@ -1,0 +1,32 @@
+{% extends 'portal/base.html' %}
+{% block title %}Profils - Plateforme de Talents{% endblock %}
+{% block content %}
+<h2>Profils d’ingénieurs</h2>
+<form method="get" style="margin:10px 0">
+  <input type="text" name="q" value="{{ q }}" placeholder="Rechercher par nom d’utilisateur" />
+  <button type="submit">Rechercher</button>
+</form>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Utilisateur</th>
+      <th>Intitulé</th>
+      <th>Expérience (ans)</th>
+      <th>Localisation</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in profils %}
+    <tr>
+      <td>{{ p.user.username }}</td>
+      <td>{{ p.title }}</td>
+      <td>{{ p.years_of_experience }}</td>
+      <td>{{ p.location }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4" class="muted">Aucun profil</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="muted">Page {{ profils.number }} / {{ profils.paginator.num_pages }}</div>
+{% endblock %}

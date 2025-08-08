@@ -1,0 +1,28 @@
+{% extends 'portal/base.html' %}
+{% block title %}Projets - Plateforme de Talents{% endblock %}
+{% block content %}
+<h2>Projets</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Domaine</th>
+      <th>Localisation</th>
+      <th>Complexité</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in projets %}
+    <tr>
+      <td>{{ p.name }}</td>
+      <td>{{ p.domain }}</td>
+      <td>{{ p.location }}</td>
+      <td>{{ p.complexity }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4" class="muted">Aucun projet</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="muted">Page {{ projets.number }} / {{ projets.paginator.num_pages }}</div>
+{% endblock %}

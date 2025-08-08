@@ -1,0 +1,19 @@
+{% extends 'portal/base.html' %}
+{% block title %}Tableau - Plateforme de Talents{% endblock %}
+{% block content %}
+<h2>Tableau de bord</h2>
+<div class="grid" style="grid-template-columns:repeat(3,1fr)">
+  <div class="card">
+    <div class="muted">Ingénieurs</div>
+    <div style="font-size:26px;font-weight:800">{{ stats.nb_ingenieurs }}</div>
+  </div>
+  <div class="card">
+    <div class="muted">Projets</div>
+    <div style="font-size:26px;font-weight:800">{{ stats.nb_projets }}</div>
+  </div>
+  <div class="card">
+    <div class="muted">API</div>
+    <div><a href="/api/docs/">Ouvrir la documentation</a></div>
+  </div>
+</div>
+{% endblock %}

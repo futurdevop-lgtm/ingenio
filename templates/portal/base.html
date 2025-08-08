@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Application - Plateforme de Talents{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'app.css' %}">
+  <style>
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;background:#0f172a;color:#e5e7eb}
+    header,main,footer{max-width:1200px;margin:0 auto;padding:16px}
+    a{color:#38bdf8;text-decoration:none}
+    .nav{display:flex;gap:16px;align-items:center}
+    .nav a{color:#cbd5e1}
+    .nav a:hover{color:#fff}
+    .grid{display:grid;gap:12px}
+    .card{background:#111827;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px}
+    .muted{color:#94a3b8}
+    .table{width:100%;border-collapse:collapse}
+    .table th,.table td{border-bottom:1px solid rgba(255,255,255,.08);padding:8px;text-align:left}
+    .right{float:right}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <a href="/">Accueil</a>
+      <a href="/app/tableau/">Tableau</a>
+      <a href="/app/profils/">Profils</a>
+      <a href="/app/projets/">Projets</a>
+      <a href="/app/recherche/">Recherche</a>
+      <a class="right" href="/admin/">Admin</a>
+    </div>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="muted">
+    © Plateforme de Talents
+  </footer>
+</body>
+</html>

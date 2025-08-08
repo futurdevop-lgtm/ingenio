@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'dashboard',
     'communications',
     'security',
+    'portal',
 ]
 
 MIDDLEWARE = [
