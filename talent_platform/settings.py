@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'communications',
     'security',
     'portal',
+    'issues',
 ]
 
 MIDDLEWARE = [

@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='/app/', permanent=False)),
     path('app/', include(('portal.urls', 'portal'), namespace='portal')),
+    path('app/incidents/', include(('issues.urls', 'issues'), namespace='issues')),
     path('api/comptes/', include(('accounts.urls', 'accounts'), namespace='accounts')),
     path('api/profils/', include(('profiles.urls', 'profiles'), namespace='profiles')),
     path('api/projets/', include(('projects.urls', 'projects'), namespace='projects')),
