@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Plateforme de Talents IT</title>
+  <title>IngenioManager</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -37,12 +37,11 @@
   <header>
     <div class="brand">
       <div class="logo"></div>
-      <h1>Plateforme de Talents IT</h1>
+      <h1>IngenioManager</h1>
     </div>
     <nav>
-      <a href="/api/docs/">Documentation API</a>
-      <a href="/admin/">Admin</a>
-      <a href="https://docs.djangoproject.com/" target="_blank" rel="noreferrer">Django</a>
+      <a href="/app/inscription/">Inscription</a>
+      <a href="/app/login/">Connexion</a>
     </nav>
   </header>
 
@@ -51,53 +50,34 @@
       <h2>Recrutez, agencez et suivez vos équipes techniques en toute simplicité</h2>
       <p>Profils d’ingénieurs détaillés, recherche multicritères, matching compétences/projets, tableaux de bord et notifications en temps réel.</p>
       <div class="cta">
-        <a class="btn primary" href="/api/docs/">Explorer l’API</a>
-        <a class="btn" href="/api/recherche/ingenieurs/">Recherche ingénieurs</a>
-        <a class="btn" href="/api/projets/">Projets</a>
-        <a class="btn" href="/api/tableau/manager/">Tableau de bord</a>
+        <a class="btn primary" href="/app/inscription/">Commencer</a>
+        <a class="btn" href="/app/login/">J’ai déjà un compte</a>
       </div>
       <div class="badges" style="margin-top:18px">
-        <span class="badge">DRF + JWT</span>
         <span class="badge">RBAC</span>
         <span class="badge">2FA (TOTP)</span>
-        <span class="badge">Channels (WebSocket)</span>
+        <span class="badge">WebSocket</span>
       </div>
     </div>
     <div>
       <div class="card">
-        <h3>Authentification</h3>
-        <p>Obtenir un jeton JWT: <code>POST /api/comptes/auth/jeton/</code></p>
+        <h3>Portail</h3>
+        <p>Interface claire et moderne pour gérer profils et projets.</p>
       </div>
       <div class="card" style="margin-top:12px">
-        <h3>Exemples de filtres</h3>
-        <p>Recherche: <code>/api/recherche/ingenieurs/?pile=MEAN&niveau=Senior&localisation=Paris</code></p>
+        <h3>Recherche</h3>
+        <p>Filtres intelligents: compétences, localisation, disponibilité.</p>
       </div>
       <div class="card" style="margin-top:12px">
-        <h3>2FA</h3>
-        <p>Démarrer: <code>POST /api/comptes/utilisateurs/2fa/demarrer/</code>, Activer: <code>/2fa/activer/</code></p>
+        <h3>Sécurité</h3>
+        <p>2FA, rôles, audit des connexions.</p>
       </div>
-    </div>
-  </section>
-
-  <section class="grid">
-    <div class="card">
-      <h3>Profils d’ingénieurs</h3>
-      <p>CRUD des profils, compétences, certifications et CV.</p>
-    </div>
-    <div class="card">
-      <h3>Attribution de projets</h3>
-      <p>Matching compétences/besoins, sprints, jalons et charge de travail.</p>
-    </div>
-    <div class="card">
-      <h3>Tableaux de bord</h3>
-      <p>KPIs en temps réel pour managers: effectifs, activités et performances.</p>
     </div>
   </section>
 
   <footer>
     <span>© {{ now|default:"" }}</span>
-    <span>Made with Django & DRF</span>
+    <span>IngenioManager</span>
   </footer>
-  <script src="/static/app.js"></script>
 </body>
 </html>

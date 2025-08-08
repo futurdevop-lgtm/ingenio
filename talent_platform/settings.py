@@ -149,7 +149,7 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'API Plateforme de Talents',
+    'TITLE': 'API IngenioManager',
     'DESCRIPTION': "API pour la gestion des profils d'ingénieurs, des projets, de la recherche et des tableaux de bord",
     'VERSION': '1.0.0',
 }
