@@ -12,7 +12,7 @@ from security.permissions import EstManagerOuAdmin
 
 def accueil_app(request):
     if not request.user.is_authenticated:
-        return redirect('portal:login')
+        return redirect('portal:inscription')
     return redirect('portal:tableau')
 
 
