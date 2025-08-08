@@ -25,13 +25,20 @@ def tableau(request):
 @login_required
 def profils(request):
     q = request.GET.get('q', '')
+    localisation = request.GET.get('localisation', '')
+    disponibilite = request.GET.get('disponibilite', '')
     profils_qs = EngineerProfile.objects.select_related('user')
     if q:
         profils_qs = profils_qs.filter(user__username__icontains=q)
-    paginator = Paginator(profils_qs, 10)
+    if localisation:
+        profils_qs = profils_qs.filter(location__icontains=localisation)
+    if disponibilite:
+        profils_qs = profils_qs.filter(availability__iexact=disponibilite)
+    paginator = Paginator(profils_qs.order_by('user__username'), 10)
     page = request.GET.get('page')
     profils_page = paginator.get_page(page)
-    return render(request, 'portal/profils.html', {'profils': profils_page, 'q': q})
+    ctx = {'profils': profils_page, 'q': q, 'localisation': localisation, 'disponibilite': disponibilite}
+    return render(request, 'portal/profils.html', ctx)
 
 
 @login_required
@@ -63,6 +70,19 @@ def profil_editer(request, profil_id):
     else:
         form = EngineerProfileForm(instance=profil)
     return render(request, 'portal/form_profil.html', {'form': form, 'titre': 'Éditer un profil'})
+
+
+@login_required
+def profil_supprimer(request, profil_id):
+    profil = get_object_or_404(EngineerProfile, id=profil_id)
+    if request.method == 'POST':
+        if profil.user == request.user or request.user.is_staff or getattr(request.user, 'role', None) in ('ADMIN', 'MANAGER'):
+            profil.delete()
+            messages.success(request, 'Profil supprimé')
+        else:
+            messages.error(request, 'Action non autorisée')
+        return redirect('portal:profils')
+    return redirect('portal:profils')
 
 
 @login_required
@@ -108,9 +128,24 @@ def projet_editer(request, projet_id):
 
 
 @login_required
+def projet_supprimer(request, projet_id):
+    projet = get_object_or_404(Project, id=projet_id)
+    if request.method == 'POST':
+        if request.user.is_staff or getattr(request.user, 'role', None) in ('ADMIN', 'MANAGER'):
+            projet.delete()
+            messages.success(request, 'Projet supprimé')
+        else:
+            messages.error(request, 'Action non autorisée')
+        return redirect('portal:projets')
+    return redirect('portal:projets')
+
+
+@login_required
 def recherche(request):
     competence = request.GET.get('competence', '')
     stack = request.GET.get('pile', '')
+    localisation = request.GET.get('localisation', '')
+    disponibilite = request.GET.get('disponibilite', '')
     qs = EngineerProfile.objects.all()
     if competence:
         qs = qs.filter(skills__name__icontains=competence)
@@ -123,8 +158,12 @@ def recherche(request):
         }
         for s in stacks.get(stack.upper(), []):
             qs = qs.filter(skills__name__iexact=s)
+    if localisation:
+        qs = qs.filter(location__icontains=localisation)
+    if disponibilite:
+        qs = qs.filter(availability__iexact=disponibilite)
     skills = Skill.objects.order_by('name')[:50]
     paginator = Paginator(qs.distinct(), 12)
     page = request.GET.get('page')
     profils_page = paginator.get_page(page)
-    return render(request, 'portal/recherche.html', {'profils': profils_page, 'skills': skills, 'competence': competence, 'pile': stack})
+    return render(request, 'portal/recherche.html', {'profils': profils_page, 'skills': skills, 'competence': competence, 'pile': stack, 'localisation': localisation, 'disponibilite': disponibilite})

@@ -22,12 +22,46 @@
       <td>{{ p.domain }}</td>
       <td>{{ p.location }}</td>
       <td>{{ p.complexity }}</td>
-      <td><a class="btn btn-sm btn-secondary" href="/app/projets/{{ p.id }}/editer/">Éditer</a></td>
+      <td>
+        <a class="btn btn-sm btn-secondary" href="/app/projets/{{ p.id }}/editer/">Éditer</a>
+        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteProjet{{ p.id }}">Supprimer</button>
+        <div class="modal fade" id="confirmDeleteProjet{{ p.id }}" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header"><h5 class="modal-title">Confirmer la suppression</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+              <div class="modal-body">Voulez-vous vraiment supprimer ce projet ?</div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <form method="post" action="/app/projets/{{ p.id }}/supprimer/">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
     </tr>
     {% empty %}
     <tr><td colspan="5" class="text-muted">Aucun projet</td></tr>
     {% endfor %}
   </tbody>
 </table>
-<div class="text-muted">Page {{ projets.number }} / {{ projets.paginator.num_pages }}</div>
+<nav>
+  <ul class="pagination">
+    {% if projets.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{ projets.previous_page_number }}">Précédent</a></li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">Précédent</span></li>
+    {% endif %}
+
+    <li class="page-item active"><span class="page-link">Page {{ projets.number }} / {{ projets.paginator.num_pages }}</span></li>
+
+    {% if projets.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ projets.next_page_number }}">Suivant</a></li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">Suivant</span></li>
+    {% endif %}
+  </ul>
+</nav>
 {% endblock %}
