@@ -1,9 +1,11 @@
 {% extends 'portal/base.html' %}
 {% block title %}Projets - Plateforme de Talents{% endblock %}
 {% block content %}
-<h2>Projets</h2>
-<div style="margin:10px 0"><a href="/app/projets/creer/">Créer un projet</a></div>
-<table class="table">
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="m-0">Projets</h2>
+  <a href="/app/projets/creer/" class="btn btn-primary">Créer un projet</a>
+</div>
+<table class="table table-hover align-middle">
   <thead>
     <tr>
       <th>Nom</th>
@@ -20,12 +22,12 @@
       <td>{{ p.domain }}</td>
       <td>{{ p.location }}</td>
       <td>{{ p.complexity }}</td>
-      <td><a href="/app/projets/{{ p.id }}/editer/">Éditer</a></td>
+      <td><a class="btn btn-sm btn-secondary" href="/app/projets/{{ p.id }}/editer/">Éditer</a></td>
     </tr>
     {% empty %}
-    <tr><td colspan="5" class="muted">Aucun projet</td></tr>
+    <tr><td colspan="5" class="text-muted">Aucun projet</td></tr>
     {% endfor %}
   </tbody>
 </table>
-<div class="muted">Page {{ projets.number }} / {{ projets.paginator.num_pages }}</div>
+<div class="text-muted">Page {{ projets.number }} / {{ projets.paginator.num_pages }}</div>
 {% endblock %}

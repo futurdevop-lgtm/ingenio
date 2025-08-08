@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.urls import reverse
+from django.contrib import messages
 from profiles.models import EngineerProfile, Skill
 from projects.models import Project
 from .forms import EngineerProfileForm, ProjectForm
@@ -35,13 +36,13 @@ def profils(request):
 
 @login_required
 def profil_creer(request):
-    # Un manager/admin peut créer n'importe quel profil; un utilisateur peut créer le sien si inexistant
     if request.method == 'POST':
         form = EngineerProfileForm(request.POST, request.FILES)
         if form.is_valid():
             profil = form.save(commit=False)
             profil.user = request.user
             profil.save()
+            messages.success(request, 'Profil créé avec succès')
             return redirect('portal:profils')
     else:
         form = EngineerProfileForm()
@@ -57,6 +58,7 @@ def profil_editer(request, profil_id):
         form = EngineerProfileForm(request.POST, request.FILES, instance=profil)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Profil mis à jour')
             return redirect('portal:profils')
     else:
         form = EngineerProfileForm(instance=profil)
@@ -82,6 +84,7 @@ def projet_creer(request):
             projet = form.save(commit=False)
             projet.created_by = request.user
             projet.save()
+            messages.success(request, 'Projet créé avec succès')
             return redirect('portal:projets')
     else:
         form = ProjectForm()
@@ -97,6 +100,7 @@ def projet_editer(request, projet_id):
         form = ProjectForm(request.POST, instance=projet)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Projet mis à jour')
             return redirect('portal:projets')
     else:
         form = ProjectForm(instance=projet)

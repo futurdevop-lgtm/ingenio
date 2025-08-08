@@ -1,13 +1,19 @@
 {% extends 'portal/base.html' %}
 {% block title %}Profils - Plateforme de Talents{% endblock %}
 {% block content %}
-<h2>Profils d’ingénieurs</h2>
-<div style="margin:10px 0"><a href="/app/profils/creer/">Créer mon profil</a></div>
-<form method="get" style="margin:10px 0">
-  <input type="text" name="q" value="{{ q }}" placeholder="Rechercher par nom d’utilisateur" />
-  <button type="submit">Rechercher</button>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="m-0">Profils d’ingénieurs</h2>
+  <a href="/app/profils/creer/" class="btn btn-primary">Créer mon profil</a>
+</div>
+<form method="get" class="row g-2 mb-3">
+  <div class="col-sm-6">
+    <input class="form-control" type="text" name="q" value="{{ q }}" placeholder="Rechercher par nom d’utilisateur" />
+  </div>
+  <div class="col-auto">
+    <button class="btn btn-outline-light" type="submit">Rechercher</button>
+  </div>
 </form>
-<table class="table">
+<table class="table table-hover align-middle">
   <thead>
     <tr>
       <th>Utilisateur</th>
@@ -24,12 +30,12 @@
       <td>{{ p.title }}</td>
       <td>{{ p.years_of_experience }}</td>
       <td>{{ p.location }}</td>
-      <td><a href="/app/profils/{{ p.id }}/editer/">Éditer</a></td>
+      <td><a class="btn btn-sm btn-secondary" href="/app/profils/{{ p.id }}/editer/">Éditer</a></td>
     </tr>
     {% empty %}
-    <tr><td colspan="5" class="muted">Aucun profil</td></tr>
+    <tr><td colspan="5" class="text-muted">Aucun profil</td></tr>
     {% endfor %}
   </tbody>
 </table>
-<div class="muted">Page {{ profils.number }} / {{ profils.paginator.num_pages }}</div>
+<div class="text-muted">Page {{ profils.number }} / {{ profils.paginator.num_pages }}</div>
 {% endblock %}
