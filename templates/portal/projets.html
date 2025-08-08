@@ -2,6 +2,7 @@
 {% block title %}Projets - Plateforme de Talents{% endblock %}
 {% block content %}
 <h2>Projets</h2>
+<div style="margin:10px 0"><a href="/app/projets/creer/">Créer un projet</a></div>
 <table class="table">
   <thead>
     <tr>
@@ -9,6 +10,7 @@
       <th>Domaine</th>
       <th>Localisation</th>
       <th>Complexité</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -18,9 +20,10 @@
       <td>{{ p.domain }}</td>
       <td>{{ p.location }}</td>
       <td>{{ p.complexity }}</td>
+      <td><a href="/app/projets/{{ p.id }}/editer/">Éditer</a></td>
     </tr>
     {% empty %}
-    <tr><td colspan="4" class="muted">Aucun projet</td></tr>
+    <tr><td colspan="5" class="muted">Aucun projet</td></tr>
     {% endfor %}
   </tbody>
 </table>
