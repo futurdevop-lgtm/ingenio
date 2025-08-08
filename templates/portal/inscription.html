@@ -1,0 +1,15 @@
+{% extends 'portal/base.html' %}
+{% block title %}Inscription - Plateforme de Talents{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <h2 class="mb-3">Créer un compte</h2>
+    <form method="post" class="card-bg p-3 rounded-3">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-success">S’inscrire</button>
+      <a href="/app/login/" class="btn btn-link">Déjà un compte ? Se connecter</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

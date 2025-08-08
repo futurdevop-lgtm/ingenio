@@ -3,14 +3,32 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.urls import reverse
 from django.contrib import messages
+from django.contrib.auth import login
 from profiles.models import EngineerProfile, Skill
 from projects.models import Project
-from .forms import EngineerProfileForm, ProjectForm
+from .forms import EngineerProfileForm, ProjectForm, InscriptionForm
 from security.permissions import EstManagerOuAdmin
 
 
 def accueil_app(request):
+    if not request.user.is_authenticated:
+        return redirect('portal:login')
     return redirect('portal:tableau')
+
+
+def inscription(request):
+    if request.user.is_authenticated:
+        return redirect('portal:tableau')
+    if request.method == 'POST':
+        form = InscriptionForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Bienvenue ! Votre compte a été créé.')
+            return redirect('portal:tableau')
+    else:
+        form = InscriptionForm()
+    return render(request, 'portal/inscription.html', {'form': form})
 
 
 @login_required
