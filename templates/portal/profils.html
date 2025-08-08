@@ -1,5 +1,5 @@
 {% extends 'portal/base.html' %}
-{% block title %}Profils - Plateforme de Talents{% endblock %}
+{% block title %}Profils - IngenioManager{% endblock %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2 class="m-0">Profils d’ingénieurs</h2>
@@ -31,6 +31,7 @@
       <th>Intitulé</th>
       <th>Exp. (ans)</th>
       <th>Localisation</th>
+      <th>Spécialisations</th>
       <th></th>
     </tr>
   </thead>
@@ -41,6 +42,13 @@
       <td>{{ p.title }}</td>
       <td>{{ p.years_of_experience }}</td>
       <td>{{ p.location }}</td>
+      <td>
+        {% for s in p.specializations.all %}
+          <span class="badge text-bg-secondary me-1">{{ s.name }}</span>
+        {% empty %}
+          <span class="text-muted">-</span>
+        {% endfor %}
+      </td>
       <td>
         <a class="btn btn-sm btn-secondary" href="/app/profils/{{ p.id }}/editer/">Éditer</a>
         <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteProfil{{ p.id }}">Supprimer</button>
@@ -62,7 +70,7 @@
       </td>
     </tr>
     {% empty %}
-    <tr><td colspan="5" class="text-muted">Aucun profil</td></tr>
+    <tr><td colspan="6" class="text-muted">Aucun profil</td></tr>
     {% endfor %}
   </tbody>
 </table>

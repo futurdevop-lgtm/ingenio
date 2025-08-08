@@ -42,6 +42,7 @@ class EngineerProfile(models.Model):
     availability = models.CharField('Disponibilité', max_length=64, default='remote', help_text='remote | on-site | hybrid')
     certifications = models.ManyToManyField(Certification, blank=True, related_name='profiles', verbose_name='Certifications')
     skills = models.ManyToManyField('Skill', through='EngineerSkill', related_name='profiles', verbose_name='Compétences')
+    specializations = models.ManyToManyField('Skill', blank=True, related_name='specialized_profiles', verbose_name='Spécialisations')
     cv = models.FileField('CV', upload_to='cvs/', blank=True, null=True)
 
     class Meta:

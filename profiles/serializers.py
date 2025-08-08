@@ -45,6 +45,7 @@ class EngineerProfileSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     certifications = CertificationSerializer(many=True, required=False)
     skills = EngineerSkillSerializer(many=True, source='engineerskill_set', read_only=True)
+    specializations = SkillSerializer(many=True, read_only=True)
     experiences = ExperienceSerializer(many=True, read_only=True)
     portfolio = PortfolioProjectSerializer(many=True, read_only=True)
 
@@ -52,7 +53,7 @@ class EngineerProfileSerializer(serializers.ModelSerializer):
         model = EngineerProfile
         fields = [
             'id', 'user', 'title', 'summary', 'years_of_experience', 'location', 'availability',
-            'certifications', 'skills', 'experiences', 'portfolio', 'cv'
+            'certifications', 'skills', 'specializations', 'experiences', 'portfolio', 'cv'
         ]
         read_only_fields = ['id']
 
@@ -61,5 +62,5 @@ class EngineerProfileCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = EngineerProfile
         fields = [
-            'user', 'title', 'summary', 'years_of_experience', 'location', 'availability', 'cv'
+            'user', 'title', 'summary', 'years_of_experience', 'location', 'availability', 'cv', 'specializations'
         ]
