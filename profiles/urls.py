@@ -1,9 +1,9 @@
 from rest_framework.routers import DefaultRouter
-from .views import SkillViewSet, CertificationViewSet, EngineerProfileViewSet
+from .views import CompetenceViewSet, CertificationViewSet, ProfilIngenieurViewSet
 
 router = DefaultRouter()
-router.register(r'skills', SkillViewSet, basename='skill')
-router.register(r'certifications', CertificationViewSet, basename='cert')
-router.register(r'profiles', EngineerProfileViewSet, basename='profile')
+router.register(r'competences', CompetenceViewSet, basename='competence')
+router.register(r'certifications', CertificationViewSet, basename='certification')
+router.register(r'ingenieurs', ProfilIngenieurViewSet, basename='profil-ingenieur')
 
 urlpatterns = router.urls

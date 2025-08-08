@@ -9,41 +9,40 @@ from profiles.serializers import EngineerProfileSerializer
 
 # Create your views here.
 
-class EngineerSearchView(APIView):
+class RechercheIngenieursView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         queryset = EngineerProfile.objects.select_related('user').prefetch_related('skills', 'certifications')
 
-        stack = request.query_params.get('stack')  # MEAN, LAMP, .NET, etc.
-        level = request.query_params.get('level')  # Junior, Senior, Lead, Architect
-        domain = request.query_params.get('domain')  # web, mobile, data science, cybersecurity
-        availability = request.query_params.get('availability')  # remote/on-site/hybrid
-        location = request.query_params.get('location')
-        skills = request.query_params.getlist('skill')  # multiple skill names
-        min_years = request.query_params.get('min_years')
+        pile = request.query_params.get('pile')  # MEAN, LAMP, .NET, etc.
+        niveau = request.query_params.get('niveau')  # Junior, Senior, Lead, Architecte
+        domaine = request.query_params.get('domaine')  # web, mobile, data science, cybersécurité
+        disponibilite = request.query_params.get('disponibilite')  # remote/on-site/hybrid
+        localisation = request.query_params.get('localisation')
+        competences = request.query_params.getlist('competence')  # noms multiples
+        min_annees = request.query_params.get('min_annees')
 
-        if availability:
-            queryset = queryset.filter(availability__iexact=availability)
-        if location:
-            queryset = queryset.filter(location__icontains=location)
-        if level:
-            queryset = queryset.filter(engineerskill__level__iexact=level)
-        if min_years:
-            queryset = queryset.filter(engineerskill__years_experience__gte=int(min_years))
-        if domain:
-            # naive domain matching via profile title/summary
-            queryset = queryset.filter(Q(title__icontains=domain) | Q(summary__icontains=domain))
-        if stack:
+        if disponibilite:
+            queryset = queryset.filter(availability__iexact=disponibilite)
+        if localisation:
+            queryset = queryset.filter(location__icontains=localisation)
+        if niveau:
+            queryset = queryset.filter(engineerskill__level__iexact=niveau)
+        if min_annees:
+            queryset = queryset.filter(engineerskill__years_experience__gte=int(min_annees))
+        if domaine:
+            queryset = queryset.filter(Q(title__icontains=domaine) | Q(summary__icontains=domaine))
+        if pile:
             stacks = {
                 'MEAN': ['MongoDB', 'Express', 'Angular', 'Node.js'],
                 'MERN': ['MongoDB', 'Express', 'React', 'Node.js'],
                 'LAMP': ['Linux', 'Apache', 'MySQL', 'PHP'],
                 '.NET': ['C#', 'ASP.NET', 'SQL Server'],
             }
-            for skill_name in stacks.get(stack.upper(), []):
+            for skill_name in stacks.get(pile.upper(), []):
                 queryset = queryset.filter(skills__name__iexact=skill_name)
-        for s in skills:
+        for s in competences:
             queryset = queryset.filter(skills__name__iexact=s)
 
         queryset = queryset.distinct()

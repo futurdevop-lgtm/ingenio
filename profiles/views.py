@@ -14,7 +14,7 @@ from .serializers import (
 # Create your views here.
 
 
-class SkillViewSet(viewsets.ModelViewSet):
+class CompetenceViewSet(viewsets.ModelViewSet):
     queryset = Skill.objects.all().order_by('name')
     serializer_class = SkillSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -30,7 +30,7 @@ class CertificationViewSet(viewsets.ModelViewSet):
     search_fields = ['issuer', 'name']
 
 
-class EngineerProfileViewSet(viewsets.ModelViewSet):
+class ProfilIngenieurViewSet(viewsets.ModelViewSet):
     queryset = EngineerProfile.objects.select_related('user').prefetch_related('certifications', 'skills').all()
     permission_classes = [permissions.IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]

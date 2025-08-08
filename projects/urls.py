@@ -1,10 +1,10 @@
 from rest_framework.routers import DefaultRouter
-from .views import ProjectViewSet, AssignmentViewSet, SprintViewSet, MilestoneViewSet
+from .views import ProjetViewSet, AffectationViewSet, SprintViewSet, JalonViewSet
 
 router = DefaultRouter()
-router.register(r'', ProjectViewSet, basename='project')
-router.register(r'assignments', AssignmentViewSet, basename='assignment')
+router.register(r'', ProjetViewSet, basename='projet')
+router.register(r'affectations', AffectationViewSet, basename='affectation')
 router.register(r'sprints', SprintViewSet, basename='sprint')
-router.register(r'milestones', MilestoneViewSet, basename='milestone')
+router.register(r'jalons', JalonViewSet, basename='jalon')
 
 urlpatterns = router.urls

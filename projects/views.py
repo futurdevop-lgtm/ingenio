@@ -11,7 +11,7 @@ from profiles.models import EngineerProfile
 # Create your views here.
 
 
-class ProjectViewSet(viewsets.ModelViewSet):
+class ProjetViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all().prefetch_related('requirements')
     serializer_class = ProjectSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -22,7 +22,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=['get'], url_path='matching')
     def match(self, request, pk=None):
         project = self.get_object()
         required_skills = {req.skill_id: (req.minimum_years, req.level) for req in project.requirements.all()}
@@ -35,12 +35,12 @@ class ProjectViewSet(viewsets.ModelViewSet):
                 if skill_id in skills_map and skills_map[skill_id][0] >= min_years:
                     score += 1
             if score:
-                results.append({'profile_id': profile.id, 'user': profile.user.username, 'score': score})
+                results.append({'profil_id': profile.id, 'utilisateur': profile.user.username, 'score': score})
         results.sort(key=lambda x: x['score'], reverse=True)
         return Response(results)
 
 
-class AssignmentViewSet(viewsets.ModelViewSet):
+class AffectationViewSet(viewsets.ModelViewSet):
     queryset = Assignment.objects.select_related('project', 'engineer').all()
     serializer_class = AssignmentSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -59,7 +59,7 @@ class SprintViewSet(viewsets.ModelViewSet):
         serializer.save(project_id=self.request.data.get('project'))
 
 
-class MilestoneViewSet(viewsets.ModelViewSet):
+class JalonViewSet(viewsets.ModelViewSet):
     queryset = Milestone.objects.select_related('project').all()
     serializer_class = MilestoneSerializer
     permission_classes = [permissions.IsAuthenticated]

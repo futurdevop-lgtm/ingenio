@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import ManagerDashboardView
+from .views import TableauManagerView
 
 urlpatterns = [
-    path('manager/', ManagerDashboardView.as_view(), name='manager-dashboard'),
+    path('manager/', TableauManagerView.as_view(), name='tableau-manager'),
 ]

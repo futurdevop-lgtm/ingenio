@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import EngineerSearchView
+from .views import RechercheIngenieursView
 
 urlpatterns = [
-    path('engineers/', EngineerSearchView.as_view(), name='engineer-search'),
+    path('ingenieurs/', RechercheIngenieursView.as_view(), name='recherche-ingenieurs'),
 ]

@@ -6,7 +6,7 @@ from .models import User
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
     fieldsets = DjangoUserAdmin.fieldsets + (
-        ('Additional Info', {'fields': ('role', 'phone_number', 'location')}),
+        ('Informations complémentaires', {'fields': ('role', 'phone_number', 'location')}),
     )
     list_display = ('username', 'email', 'role', 'is_active', 'is_staff')
     list_filter = ('role', 'is_staff', 'is_active')

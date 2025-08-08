@@ -8,12 +8,12 @@ from .serializers import UserSerializer, RegisterSerializer
 User = get_user_model()
 
 
-class IsSelfOrAdmin(permissions.BasePermission):
+class EstLuiMemeOuAdmin(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user.is_staff or obj == request.user
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UtilisateurViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -22,21 +22,21 @@ class UserViewSet(viewsets.ModelViewSet):
     ordering_fields = ['id', 'username']
 
     def get_permissions(self):
-        if self.action in ['create', 'register']:
+        if self.action in ['create', 'inscription']:
             return [permissions.AllowAny()]
         if self.action in ['retrieve', 'update', 'partial_update']:
-            self.permission_classes = [IsSelfOrAdmin]
+            self.permission_classes = [EstLuiMemeOuAdmin]
         elif self.action in ['list', 'destroy']:
             self.permission_classes = [permissions.IsAdminUser]
         return super().get_permissions()
 
-    @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny])
-    def register(self, request):
+    @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny], url_path='inscription')
+    def inscription(self, request):
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
 
-    @action(detail=False, methods=['get'])
-    def me(self, request):
+    @action(detail=False, methods=['get'], url_path='moi')
+    def moi(self, request):
         return Response(UserSerializer(request.user).data)
