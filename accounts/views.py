@@ -4,6 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from .serializers import UserSerializer, RegisterSerializer
+from security.permissions import EstAdmin, EstProprietaireOuManagerAdmin
 
 User = get_user_model()
 
@@ -25,9 +26,9 @@ class UtilisateurViewSet(viewsets.ModelViewSet):
         if self.action in ['create', 'inscription']:
             return [permissions.AllowAny()]
         if self.action in ['retrieve', 'update', 'partial_update']:
-            self.permission_classes = [EstLuiMemeOuAdmin]
+            self.permission_classes = [EstProprietaireOuManagerAdmin]
         elif self.action in ['list', 'destroy']:
-            self.permission_classes = [permissions.IsAdminUser]
+            self.permission_classes = [EstAdmin]
         return super().get_permissions()
 
     @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny], url_path='inscription')
