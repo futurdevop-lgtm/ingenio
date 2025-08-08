@@ -1,0 +1,45 @@
+{% extends 'portal/base.html' %}
+{% block title %}Incidents - IngenioManager{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="m-0">Incidents</h2>
+  <a href="/app/incidents/creer/" class="btn btn-primary">Créer un ticket</a>
+</div>
+<table class="table table-hover align-middle">
+  <thead><tr><th>Titre</th><th>Projet</th><th>Assigné</th><th>Statut</th><th></th></tr></thead>
+  <tbody>
+    {% for t in tickets %}
+    <tr>
+      <td>{{ t.titre }}</td>
+      <td>{{ t.projet.name if t.projet }}</td>
+      <td>{{ t.assigne_a.username if t.assigne_a }}</td>
+      <td><span class="badge text-bg-secondary">{{ t.statut }}</span></td>
+      <td>
+        <a class="btn btn-sm btn-secondary" href="/app/incidents/{{ t.id }}/editer/">Éditer</a>
+        <form method="post" action="/app/incidents/{{ t.id }}/supprimer/" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+        </form>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5" class="text-muted">Aucun ticket</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<nav>
+  <ul class="pagination">
+    {% if tickets.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{ tickets.previous_page_number }}">Précédent</a></li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">Précédent</span></li>
+    {% endif %}
+    <li class="page-item active"><span class="page-link">Page {{ tickets.number }} / {{ tickets.paginator.num_pages }}</span></li>
+    {% if tickets.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ tickets.next_page_number }}">Suivant</a></li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">Suivant</span></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}

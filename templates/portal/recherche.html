@@ -1,0 +1,63 @@
+{% extends 'portal/base.html' %}
+{% block title %}Recherche - Plateforme de Talents{% endblock %}
+{% block content %}
+<h2>Recherche d’ingénieurs</h2>
+<form method="get" class="row g-2 mb-3">
+  <div class="col-md-3">
+    <input class="form-control" type="text" name="competence" value="{{ competence }}" placeholder="Compétence (ex: React)" />
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="pile">
+      <option value="">Pile (optionnel)</option>
+      <option value="MEAN" {% if pile == 'MEAN' %}selected{% endif %}>MEAN</option>
+      <option value="MERN" {% if pile == 'MERN' %}selected{% endif %}>MERN</option>
+      <option value="LAMP" {% if pile == 'LAMP' %}selected{% endif %}>LAMP</option>
+      <option value=".NET" {% if pile == '.NET' %}selected{% endif %}>.NET</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <input class="form-control" type="text" name="localisation" value="{{ localisation }}" placeholder="Localisation" />
+  </div>
+  <div class="col-md-2">
+    <select class="form-select" name="disponibilite">
+      <option value="">Disponibilité</option>
+      <option value="remote" {% if disponibilite == 'remote' %}selected{% endif %}>Remote</option>
+      <option value="on-site" {% if disponibilite == 'on-site' %}selected{% endif %}>Sur site</option>
+      <option value="hybrid" {% if disponibilite == 'hybrid' %}selected{% endif %}>Hybride</option>
+    </select>
+  </div>
+  <div class="col-md-1 d-grid">
+    <button class="btn btn-outline-light" type="submit">Filtrer</button>
+  </div>
+</form>
+<div class="row row-cols-1 row-cols-md-3 g-3">
+  {% for p in profils %}
+  <div class="col">
+    <div class="card card-bg p-3 h-100">
+      <div class="fw-semibold">{{ p.user.username }}</div>
+      <div class="text-muted">{{ p.title }} • {{ p.location }}</div>
+      <div class="text-muted">Expérience: {{ p.years_of_experience }} ans</div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="text-muted">Aucun résultat</div>
+  {% endfor %}
+</div>
+<nav class="mt-3">
+  <ul class="pagination">
+    {% if profils.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{ profils.previous_page_number }}&competence={{ competence }}&pile={{ pile }}&localisation={{ localisation }}&disponibilite={{ disponibilite }}">Précédent</a></li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">Précédent</span></li>
+    {% endif %}
+
+    <li class="page-item active"><span class="page-link">Page {{ profils.number }} / {{ profils.paginator.num_pages }}</span></li>
+
+    {% if profils.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ profils.next_page_number }}&competence={{ competence }}&pile={{ pile }}&localisation={{ localisation }}&disponibilite={{ disponibilite }}">Suivant</a></li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">Suivant</span></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}
