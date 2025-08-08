@@ -3,8 +3,9 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
-from .serializers import UserSerializer, RegisterSerializer
+from .serializers import UserSerializer, RegisterSerializer, TwoFASetupSerializer, TwoFAVerifySerializer
 from security.permissions import EstAdmin, EstProprietaireOuManagerAdmin
+import pyotp
 
 User = get_user_model()
 
@@ -41,3 +42,29 @@ class UtilisateurViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='moi')
     def moi(self, request):
         return Response(UserSerializer(request.user).data)
+
+    @action(detail=False, methods=['post'], url_path='2fa/demarrer')
+    def deuxfa_demarrer(self, request):
+        user = request.user
+        secret = pyotp.random_base32()
+        user.two_factor_secret = secret
+        user.save(update_fields=['two_factor_secret'])
+        otp_auth_url = pyotp.totp.TOTP(secret).provisioning_uri(name=user.email or user.username, issuer_name='PlateformeTalents')
+        return Response({'secret': secret, 'otp_auth_url': otp_auth_url})
+
+    @action(detail=False, methods=['post'], url_path='2fa/activer')
+    def deuxfa_activer(self, request):
+        serializer = TwoFAVerifySerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = request.user
+        user.two_factor_enabled = True
+        user.save(update_fields=['two_factor_enabled'])
+        return Response({'detail': '2FA activée'})
+
+    @action(detail=False, methods=['post'], url_path='2fa/desactiver')
+    def deuxfa_desactiver(self, request):
+        user = request.user
+        user.two_factor_enabled = False
+        user.two_factor_secret = ''
+        user.save(update_fields=['two_factor_enabled', 'two_factor_secret'])
+        return Response({'detail': '2FA désactivée'})

@@ -62,3 +62,9 @@ class MilestoneSerializer(serializers.ModelSerializer):
         model = Milestone
         fields = ['id', 'project', 'name', 'due_date', 'completed']
         read_only_fields = ['id', 'project']
+
+
+class ChargeTravailSerializer(serializers.Serializer):
+    profil_id = serializers.IntegerField()
+    utilisateur = serializers.CharField()
+    charge_totale = serializers.IntegerField(help_text='Somme des pourcentages alloués sur les affectations actives')

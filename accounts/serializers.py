@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+import pyotp
 
 User = get_user_model()
 
@@ -7,7 +8,7 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'role', 'phone_number', 'location']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'role', 'phone_number', 'location', 'two_factor_enabled']
         read_only_fields = ['id']
 
 
@@ -24,3 +25,22 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+
+class TwoFASetupSerializer(serializers.Serializer):
+    secret = serializers.CharField(read_only=True)
+    otp_auth_url = serializers.CharField(read_only=True)
+
+    def create(self, validated_data):  # not used
+        raise NotImplementedError
+
+
+class TwoFAVerifySerializer(serializers.Serializer):
+    code = serializers.CharField()
+
+    def validate(self, attrs):
+        user = self.context['request'].user
+        totp = pyotp.TOTP(user.two_factor_secret)
+        if not totp.verify(attrs['code']):
+            raise serializers.ValidationError('Code TOTP invalide')
+        return attrs

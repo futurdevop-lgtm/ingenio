@@ -1,6 +1,7 @@
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
+import pyotp
 
 User = get_user_model()
 
@@ -35,3 +36,16 @@ class TestsComptes(APITestCase):
         response = self.client.get(reverse('utilisateur-list') + 'moi/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['username'], 'user')
+
+    def test_deuxfa(self):
+        token = self.client.post(reverse('obtenir_jeton'), {'username': 'user', 'password': 'passuser'}, format='json').data['access']
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+        # démarrage
+        resp = self.client.post(reverse('utilisateur-list') + '2fa/demarrer/')
+        self.assertEqual(resp.status_code, 200)
+        secret = resp.data['secret']
+        code = pyotp.TOTP(secret).now()
+        # activer
+        resp2 = self.client.post(reverse('utilisateur-list') + '2fa/activer/', {'code': code}, format='json')
+        self.assertEqual(resp2.status_code, 200)
+        self.assertTrue(User.objects.get(username='user').two_factor_enabled)

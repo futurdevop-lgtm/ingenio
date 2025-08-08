@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from security.permissions import LectureSeuleOuManagerAdmin, EstManagerOuAdmin
 from .models import Project, Assignment, Sprint, Milestone
-from .serializers import ProjectSerializer, AssignmentSerializer, SprintSerializer, MilestoneSerializer
+from .serializers import ProjectSerializer, AssignmentSerializer, SprintSerializer, MilestoneSerializer, ChargeTravailSerializer
 from profiles.models import EngineerProfile
 
 
@@ -39,6 +39,16 @@ class ProjetViewSet(viewsets.ModelViewSet):
                 results.append({'profil_id': profile.id, 'utilisateur': profile.user.username, 'score': score})
         results.sort(key=lambda x: x['score'], reverse=True)
         return Response(results)
+
+    @action(detail=False, methods=['get'], url_path='charge-travail', permission_classes=[permissions.IsAuthenticated])
+    def charge_travail(self, request):
+        # charge totale par profil = somme des pourcentages alloués de toutes affectations
+        charges = []
+        for profil in EngineerProfile.objects.all():
+            total = sum(a.allocated_percentage for a in profil.assignments.all())
+            charges.append({'profil_id': profil.id, 'utilisateur': profil.user.username, 'charge_totale': total})
+        serializer = ChargeTravailSerializer(charges, many=True)
+        return Response(serializer.data)
 
 
 class AffectationViewSet(viewsets.ModelViewSet):

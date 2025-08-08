@@ -17,5 +17,9 @@ class User(AbstractUser):
     phone_number = models.CharField('Numéro de téléphone', max_length=32, blank=True)
     location = models.CharField('Localisation', max_length=128, blank=True)
 
+    # 2FA (TOTP)
+    two_factor_enabled = models.BooleanField('2FA activée', default=False)
+    two_factor_secret = models.CharField('Secret TOTP', max_length=64, blank=True)
+
     def __str__(self) -> str:
         return f"{self.username} ({self.role})"
